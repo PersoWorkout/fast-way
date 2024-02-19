@@ -10,14 +10,20 @@
                 throw new ArgumentException("Invalid error", nameof(error));
             }
             IsSucess = isSuccess;
-            Error = error;
+            Errors = [error];
+        }
+
+        private Result(bool isSuccess, List<Error> errors)
+        {
+            IsSucess = isSuccess;
+            Errors = errors;
         }
 
         private Result(T? data = null)
         {
 
             IsSucess = true;
-            Error = Error.None;
+            Errors = [Error.None];
             Data = data;
         }
 
@@ -25,7 +31,7 @@
 
         public bool IsFailure => !IsSucess;
 
-        public Error Error { get; }
+        public List<Error> Errors { get; }
 
         public T? Data { get; }
 
@@ -33,5 +39,6 @@
         public static Result<T> Success() => new();
 
         public static Result<T> Failure(Error error) => new(false, error);
+        public static Result<T> Failure(List<Error> errors) => new(false, errors);
     }
 }
