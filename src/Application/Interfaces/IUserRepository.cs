@@ -4,7 +4,7 @@ namespace Application.Interfaces
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAll();
+        Task<List<User>> GetAll();
         Task<User> Create(User user);
         Task<User> GetById(Guid id);
         Task<bool> ExistEmail(string Email);
