@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Domain.Errors;
 using System.Text.RegularExpressions;
 
 namespace Domain.ValueObjects
@@ -20,14 +21,14 @@ namespace Domain.ValueObjects
             var errors = new List<Error>();
 
             if (string.IsNullOrEmpty(value))
-                errors.Add(new Error("Email.Value", "The email is required"));
+                errors.Add(EmailErrors.IsRequired);
 
             if (!Regex.IsMatch(
                     value,
                     RegexPatternValue,
                     RegexOptionsValue,
                     TimeSpan.FromMilliseconds(250)))
-                errors.Add(new Error("Email.Value", "The email is not valid"));
+                errors.Add(EmailErrors.InvalidEmail);
 
             if (errors.Count > 0)
                 return Result<EmailValueObject>.Failure(errors);

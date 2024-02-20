@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Domain.Errors;
 using System.Text.RegularExpressions;
 
 namespace Domain.ValueObjects;
@@ -18,13 +19,13 @@ public class PasswordValueObject : ValueObject
     {
         List<Error> errors = [];
         if (string.IsNullOrEmpty(value))
-            errors.Add(new Error("Password.Empty", "The password is required"));
+            errors.Add(PasswordErrors.IsRequired);
 
         if (!Regex.IsMatch(value,
                 PasswordRegexPattern,
                 PasswordRegexOptions,
                 TimeSpan.FromMilliseconds(250)))
-            errors.Add(new Error("Password.Invalid", "The password don't respect the format"));
+            errors.Add(PasswordErrors.IsInvalid);
 
         if (errors.Count > 0)
             return Result<PasswordValueObject>.Failure(errors);
