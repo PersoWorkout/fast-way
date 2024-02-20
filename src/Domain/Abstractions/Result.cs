@@ -2,20 +2,15 @@
 {
     public class Result<T> where T : class?
     {
-        private Result(bool isSuccess, Error error)
+        private Result(Error error)
         {
-            if (isSuccess && error != Error.None ||
-                !isSuccess && error == Error.None)
-            {
-                throw new ArgumentException("Invalid error", nameof(error));
-            }
-            IsSucess = isSuccess;
+            IsSucess = false;
             Errors = [error];
         }
 
-        private Result(bool isSuccess, List<Error> errors)
+        private Result(List<Error> errors)
         {
-            IsSucess = isSuccess;
+            IsSucess = false;
             Errors = errors;
         }
 
@@ -38,7 +33,7 @@
         public static Result<T> Success(T data) => new(data);
         public static Result<T> Success() => new();
 
-        public static Result<T> Failure(Error error) => new(false, error);
-        public static Result<T> Failure(List<Error> errors) => new(false, errors);
+        public static Result<T> Failure(Error error) => new(error);
+        public static Result<T> Failure(List<Error> errors) => new(errors);
     }
 }
