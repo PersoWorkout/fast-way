@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Domain.ValueObjects;
 
 namespace Domain.Models
 {
@@ -6,6 +7,20 @@ namespace Domain.Models
     {
         public string Firstname { get; set; }
         public string Lastname { get; set; }
-        public string Password { get; set; }
+        public EmailValueObject Email { get; set; }
+        public PasswordValueObject Password { get; set; }
+
+        public void Update(
+            string? firstname = null,
+            string? lastname = null, 
+            EmailValueObject? email = null, 
+            PasswordValueObject? password = null)
+        {
+            if (!string.IsNullOrEmpty(firstname)) Firstname = firstname;
+            if (!string.IsNullOrEmpty(lastname)) Lastname = lastname;
+            if (email != null) Email = email;
+            if (password != null) Password = password;
+            UpdatedAt = DateTime.Now;
+        }
     }
 }

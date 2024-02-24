@@ -5,7 +5,7 @@ namespace Domain.UnitProject.ValueObjects;
 public class EmailValueObjectTest
 {
     [Fact]
-    public void Create_ShouldREturnSuccessResult_WhenValueIsValidEmail()
+    public void Create_ShouldReturnSuccessResult_WhenValueIsValidEmail()
     {
         //Arrange
         const string ValidEmail = "test.test@example.com";
