@@ -1,7 +1,7 @@
 ﻿using Application.Queries;
 using Domain.Abstractions;
+using Domain.DTOs.Users.Response;
 using Domain.Errors;
-using Domain.Models;
 using MediatR;
 
 namespace Application.Actions.Users
@@ -15,11 +15,11 @@ namespace Application.Actions.Users
             _sender = sender;
         }
 
-        public async Task<Result<User>> Execute(string id)
+        public async Task<Result<UserDetails>> Execute(string id)
         {
             if(!Guid.TryParse(id, out var parsedId))
             {
-                return Result<User>.Failure(
+                return Result<UserDetails>.Failure(
                     UserErrors.NotFound(id));
             }
             return await _sender.Send(

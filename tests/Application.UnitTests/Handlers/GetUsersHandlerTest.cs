@@ -2,9 +2,9 @@
 using Application.Interfaces;
 using Application.Mappers;
 using Application.Queries;
+using Application.UnitTests.Configuration.Mappers;
 using AutoMapper;
 using Domain.DTOs.Users.Response;
-using Domain.Models;
 using Moq;
 
 namespace Application.UnitTests.Handlers
@@ -18,12 +18,7 @@ namespace Application.UnitTests.Handlers
         {
             _mockedUserRepository = new Mock<IUserRepository>();
 
-            var mapConfig = new MapperConfiguration(config =>
-            {
-                config.AddProfile<UserProfile>();
-            });
-
-            _mapper = mapConfig.CreateMapper();
+            _mapper = MapperConfigurator.CreateMapperForUserProfile();
         }
 
         [Fact]

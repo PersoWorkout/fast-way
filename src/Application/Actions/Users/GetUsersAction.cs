@@ -1,7 +1,6 @@
 ﻿using Application.Queries;
 using Domain.Abstractions;
 using Domain.DTOs.Users.Response;
-using Domain.Models;
 using MediatR;
 
 namespace Application.Actions.Users
