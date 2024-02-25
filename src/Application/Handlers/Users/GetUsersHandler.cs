@@ -1,20 +1,26 @@
 ﻿using Application.Interfaces;
 using Application.Queries;
+using AutoMapper;
 using Domain.Abstractions;
-using Domain.Models;
+using Domain.DTOs.Users.Response;
 using MediatR;
 
 namespace Application.Handlers.Users;
 
-public class GetUsersHandler(IUserRepository userRepository) : 
-    IRequestHandler<GetUsersQuery, Result<List<User>>>
+public class GetUsersHandler(
+    IUserRepository userRepository, 
+    IMapper mapper) : IRequestHandler<GetUsersQuery, Result<List<UserForList>>>
 {
     private readonly IUserRepository _userRepository = userRepository;
+    private readonly IMapper _mapper = mapper;
 
-    public async Task<Result<List<User>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<UserForList>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        return Result<List<User>>
-            .Success(await _userRepository.GetAll());
+        var data = await _userRepository.GetAll();
+        return Result<List<UserForList>>
+                .Success(data.Select(
+                    _mapper.Map<UserForList>)
+                .ToList());
     }
 }
 

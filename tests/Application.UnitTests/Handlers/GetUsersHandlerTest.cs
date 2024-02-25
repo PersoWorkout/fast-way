@@ -1,6 +1,9 @@
 ﻿using Application.Handlers.Users;
 using Application.Interfaces;
+using Application.Mappers;
 using Application.Queries;
+using AutoMapper;
+using Domain.DTOs.Users.Response;
 using Domain.Models;
 using Moq;
 
@@ -8,11 +11,19 @@ namespace Application.UnitTests.Handlers
 {
     public class GetUsersHandlerTest
     {
-        private Mock<IUserRepository> _mockedUserRepository;
+        private readonly Mock<IUserRepository> _mockedUserRepository;
+        private readonly IMapper _mapper;
 
         public GetUsersHandlerTest()
         {
             _mockedUserRepository = new Mock<IUserRepository>();
+
+            var mapConfig = new MapperConfiguration(config =>
+            {
+                config.AddProfile<UserProfile>();
+            });
+
+            _mapper = mapConfig.CreateMapper();
         }
 
         [Fact]
@@ -25,7 +36,7 @@ namespace Application.UnitTests.Handlers
                 x => x.GetAll())
                 .ReturnsAsync([]);
 
-            var handler = new GetUsersHandler(_mockedUserRepository.Object);
+            var handler = new GetUsersHandler(_mockedUserRepository.Object, _mapper);
 
             //Act
 
@@ -33,7 +44,7 @@ namespace Application.UnitTests.Handlers
 
             //Assert
             Assert.True(result.IsSucess);
-            Assert.IsType<List<User>>(result.Data);
+            Assert.IsType<List<UserForList>>(result.Data);
         }
     }
 }
