@@ -26,7 +26,13 @@ namespace Application.UnitTests.Actions
         public async Task Execute_ShouldReturnFailureResult_WhenPayloadIsNotValid()
         {
             //Arrange
-            var request = new CreateUserRequest();
+            var request = new CreateUserRequest()
+            {
+                Firstname = string.Empty, 
+                Lastname = string.Empty, 
+                Email = string.Empty, 
+                Password = string.Empty
+            };
 
             //Act
             var result = await _action.Execute(request);
