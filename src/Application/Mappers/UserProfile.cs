@@ -11,15 +11,16 @@ namespace Application.Mappers
     {
         public UserProfile() 
         {
-            CreateMap<CreateUserRequest, CreateUserCommand>();
-
-            CreateMap<CreateUserCommand, User>()
+            CreateMap<CreateUserRequest, CreateUserCommand>()
                 .ForMember(dest => dest.Email,
                     opt => opt.MapFrom(
                         src => EmailValueObject.Create(src.Email).Data))
                 .ForMember(dest => dest.Password,
                     opt => opt.MapFrom(
                         src => PasswordValueObject.Create(src.Password).Data));
+
+            CreateMap<CreateUserCommand, User>();
+                
 
             CreateMap<User, UserForList>();
             CreateMap<User, UserDetails>()

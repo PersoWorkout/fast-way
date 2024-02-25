@@ -6,13 +6,8 @@ using AutoMapper;
 using Domain.DTOs.Users.Response;
 using Domain.Errors;
 using Domain.Models;
-using Microsoft.Extensions.DependencyInjection;
+using Domain.ValueObjects;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.Handlers
 {
@@ -31,35 +26,14 @@ namespace Application.UnitTests.Handlers
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailureResult_WhenEmailAndPasswordAreNotValid()
-        {
-            //Arrange
-            var command = new CreateUserCommand()
-            {
-                Firstname = "john",
-                Lastname = "Doe",
-                Email = "john.doe",
-                Password = "pass"
-            };
-
-            //Act
-            var result = await _handler.Handle(command, default);
-
-            //Assert
-            Assert.True(result.IsFailure);
-            Assert.Contains(EmailErrors.Invalid, result.Errors);
-            Assert.Contains(PasswordErrors.Invalid, result.Errors);
-        }
-
-        [Fact]
         public async Task Handle_ShouldReturnFailureResult_WhenEmailAlreadyUsed()
         {
             var command = new CreateUserCommand()
             {
                 Firstname = "john",
                 Lastname = "Doe",
-                Email = "john.doe@example.com",
-                Password = "Password123!"
+                Email = EmailValueObject.Create("john.doe@example.com").Data,
+                Password = PasswordValueObject.Create("Password123!").Data
             };
 
             _mockedUserRepository.Setup(
@@ -82,8 +56,8 @@ namespace Application.UnitTests.Handlers
             {
                 Firstname = "john",
                 Lastname = "Doe",
-                Email = "john.doe@example.com",
-                Password = "Password123!"
+                Email = EmailValueObject.Create("john.doe@example.com").Data,
+                Password = PasswordValueObject.Create("Password123!").Data
             };
 
             _mockedUserRepository.Setup(

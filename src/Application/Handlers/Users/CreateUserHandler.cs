@@ -5,7 +5,6 @@ using Domain.Abstractions;
 using Domain.DTOs.Users.Response;
 using Domain.Errors;
 using Domain.Models;
-using Domain.ValueObjects;
 using MediatR;
 
 namespace Application.Handlers.Users
@@ -23,20 +22,7 @@ namespace Application.Handlers.Users
 
         public async Task<Result<UserForList>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            List<Error> errors = [];
-
-            var emailValue = EmailValueObject.Create(request.Email);
-            if (emailValue.IsFailure)
-                errors.Add(EmailErrors.Invalid);
-
-            var passwordValue = PasswordValueObject.Create(request.Password);
-            if(passwordValue.IsFailure)
-                errors.Add(PasswordErrors.Invalid);
-
-            if(errors.Count > 0)
-                return Result<UserForList>.Failure(errors);
-
-            if (await _userRepository.EmailAlreadyUsed(emailValue.Data!.Value))
+            if (await _userRepository.EmailAlreadyUsed(request.Email.Value))
                 return Result<UserForList>
                     .Failure(EmailErrors.Invalid);
 

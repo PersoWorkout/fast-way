@@ -25,22 +25,19 @@ namespace Application.Validators.Users
                 .NotEmpty()
                 .WithErrorCode(EmailErrors.Empty.Code)
                 .WithMessage(EmailErrors.Empty.Description)
-                .EmailAddress();
-            //.MustAsync(async (email, _) => 
-            //    !await _userRepository
-            //        .EmailAlreadyUsed(email))
-            //.WithErrorCode(EmailErrors.Invalid.Code)
-            //.WithMessage(EmailErrors.Invalid.Description);
+                .EmailAddress()
+                .WithErrorCode(EmailErrors.Invalid.Code)
+                .WithMessage(EmailErrors.Invalid.Description);
 
             RuleFor(x => x.Password)
                 .NotEmpty()
                 .WithErrorCode(PasswordErrors.Empty.Code)
-                .WithMessage(PasswordErrors.Empty.Description);
-                //.Must((password) => 
-                //    PasswordValueObject
-                //        .Create(password).IsSucess)
-                //.WithErrorCode(PasswordErrors.Invalid.Code)
-                //.WithMessage(PasswordErrors.Invalid.Description);
+                .WithMessage(PasswordErrors.Empty.Description)
+                .Must((password) =>
+                    PasswordValueObject
+                        .Create(password).IsSucess)
+                .WithErrorCode(PasswordErrors.Invalid.Code)
+                .WithMessage(PasswordErrors.Invalid.Description);
         }
     }
 }
