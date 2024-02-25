@@ -8,11 +8,8 @@ namespace Application.Validators.Users
 {
     public class CreateUserRequestValidator: AbstractValidator<CreateUserRequest>
     {
-        private readonly IUserRepository _userRepository;
-
-        public CreateUserRequestValidator(IUserRepository userRepository) {
-
-            _userRepository = userRepository;
+        public CreateUserRequestValidator() 
+        {
 
             RuleFor(x => x.Firstname)
                 .NotEmpty()
