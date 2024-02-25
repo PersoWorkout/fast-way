@@ -19,13 +19,13 @@ public class PasswordValueObject : ValueObject
     {
         List<Error> errors = [];
         if (string.IsNullOrEmpty(value))
-            errors.Add(PasswordErrors.IsRequired);
+            errors.Add(PasswordErrors.Empty);
 
         if (!Regex.IsMatch(value,
                 PasswordRegexPattern,
                 PasswordRegexOptions,
                 TimeSpan.FromMilliseconds(250)))
-            errors.Add(PasswordErrors.IsInvalid);
+            errors.Add(PasswordErrors.Invalid);
 
         if (errors.Count > 0)
             return Result<PasswordValueObject>.Failure(errors);

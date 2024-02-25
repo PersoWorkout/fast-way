@@ -21,14 +21,14 @@ namespace Domain.ValueObjects
             var errors = new List<Error>();
 
             if (string.IsNullOrEmpty(value))
-                errors.Add(EmailErrors.IsRequired);
+                errors.Add(EmailErrors.Empty);
 
             if (!Regex.IsMatch(
                     value,
                     RegexPatternValue,
                     RegexOptionsValue,
                     TimeSpan.FromMilliseconds(250)))
-                errors.Add(EmailErrors.InvalidEmail);
+                errors.Add(EmailErrors.Invalid);
 
             if (errors.Count > 0)
                 return Result<EmailValueObject>.Failure(errors);
