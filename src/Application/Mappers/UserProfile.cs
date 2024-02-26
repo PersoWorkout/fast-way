@@ -20,6 +20,14 @@ namespace Application.Mappers
                         src => PasswordValueObject.Create(src.Password).Data));
 
             CreateMap<CreateUserCommand, User>();
+
+            CreateMap<UpdateUserRequest, UpdateUserCommand>()
+                .ForMember(dest => dest.Email,
+                    opt => opt.MapFrom(
+                        src => EmailValueObject.Create(src.Email).Data))
+                .ForMember(dest => dest.Password,
+                    opt => opt.MapFrom(
+                        src => PasswordValueObject.Create(src.Password).Data)); ;
                 
 
             CreateMap<User, UserForList>();
