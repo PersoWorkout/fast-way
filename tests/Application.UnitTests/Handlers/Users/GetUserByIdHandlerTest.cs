@@ -8,7 +8,7 @@ using Domain.Errors;
 using Domain.Models;
 using Moq;
 
-namespace Application.UnitTests.Handlers
+namespace Application.UnitTests.Handlers.Users
 {
     public class GetUserByIdHandlerTest
     {
@@ -40,7 +40,7 @@ namespace Application.UnitTests.Handlers
             //Assert
             Assert.True(result.IsFailure);
             Assert.Contains(
-                UserErrors.NotFound(id.ToString()), 
+                UserErrors.NotFound(id.ToString()),
                 result.Errors);
         }
 

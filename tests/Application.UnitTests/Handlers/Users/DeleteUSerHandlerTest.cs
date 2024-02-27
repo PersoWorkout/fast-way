@@ -5,7 +5,7 @@ using Domain.Errors;
 using Domain.Models;
 using Moq;
 
-namespace Application.UnitTests.Handlers
+namespace Application.UnitTests.Handlers.Users
 {
     public class DeleteUSerHandlerTest
     {

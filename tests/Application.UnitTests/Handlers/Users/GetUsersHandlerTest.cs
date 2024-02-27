@@ -7,7 +7,7 @@ using AutoMapper;
 using Domain.DTOs.Users.Response;
 using Moq;
 
-namespace Application.UnitTests.Handlers
+namespace Application.UnitTests.Handlers.Users
 {
     public class GetUsersHandlerTest
     {

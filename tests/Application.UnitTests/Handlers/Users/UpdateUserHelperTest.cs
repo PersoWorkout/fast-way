@@ -9,7 +9,7 @@ using Domain.Models;
 using Domain.ValueObjects;
 using Moq;
 
-namespace Application.UnitTests.Handlers
+namespace Application.UnitTests.Handlers.Users
 {
     public class UpdateUserHandlerTest
     {
@@ -49,7 +49,7 @@ namespace Application.UnitTests.Handlers
             //Asert
             Assert.True(result.IsFailure);
             Assert.Contains(
-                UserErrors.NotFound(id.ToString()), 
+                UserErrors.NotFound(id.ToString()),
                 result.Errors);
 
             _mockedUserRepository.Verify(
@@ -127,7 +127,7 @@ namespace Application.UnitTests.Handlers
 
             _mockedUserRepository.Verify(
                 x => x.Update(It.IsAny<User>()),
-                Times.Once);       
+                Times.Once);
         }
     }
 }

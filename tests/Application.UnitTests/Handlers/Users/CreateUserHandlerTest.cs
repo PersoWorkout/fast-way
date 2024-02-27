@@ -9,7 +9,7 @@ using Domain.Models;
 using Domain.ValueObjects;
 using Moq;
 
-namespace Application.UnitTests.Handlers
+namespace Application.UnitTests.Handlers.Users
 {
     public class CreateUserHandlerTest
     {
