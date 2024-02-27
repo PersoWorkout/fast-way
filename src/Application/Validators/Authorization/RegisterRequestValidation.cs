@@ -41,6 +41,11 @@ namespace Application.Validators.Authorization
                 .WithErrorCode(PasswordErrors.Invalid.Code)
                 .WithMessage(PasswordErrors.Invalid.Description);
 
+            RuleFor(x => x.PasswordConfirmation)
+                .Equal(x => x.Password)
+                .WithErrorCode(PasswordErrors.InvalidConfirmation.Code)
+                .WithMessage(PasswordErrors.InvalidConfirmation.Description);
+
         }
     }
 }

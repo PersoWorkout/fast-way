@@ -14,5 +14,15 @@ namespace Application.UnitTests.Configuration.Mappers
 
             return configuration.CreateMapper();
         }
+
+        public static IMapper CreateMapperForAuthProfile()
+        {
+            var configuration = new MapperConfiguration(config =>
+            {
+                config.AddProfile<AuthProfile>();
+            });
+
+            return configuration.CreateMapper();
+        }
     }
 }

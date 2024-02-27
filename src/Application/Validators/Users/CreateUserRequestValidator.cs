@@ -36,12 +36,7 @@ namespace Application.Validators.Users
                     PasswordValueObject
                         .Create(password).IsSucess)
                 .WithErrorCode(PasswordErrors.Invalid.Code)
-                .WithMessage(PasswordErrors.Invalid.Description);
-
-            RuleFor(x => x.Password)
-                .Equal(x => x.Password)
-                .WithErrorCode(PasswordErrors.InvalidConfirmation.Code)
-                .WithMessage(PasswordErrors.InvalidConfirmation.Description);
+                .WithMessage(PasswordErrors.Invalid.Description);          
         }
     }
 }

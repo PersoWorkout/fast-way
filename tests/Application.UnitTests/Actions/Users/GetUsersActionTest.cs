@@ -3,7 +3,7 @@ using Application.Queries;
 using MediatR;
 using Moq;
 
-namespace Application.UnitTests.Actions
+namespace Application.UnitTests.Actions.Users
 {
     public class GetUsersActionTest
     {

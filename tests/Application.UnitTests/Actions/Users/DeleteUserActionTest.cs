@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.UnitTests.Actions
+namespace Application.UnitTests.Actions.Users
 {
-    public  class DeleteUserActionTest
+    public class DeleteUserActionTest
     {
         private readonly Mock<ISender> _mockedSender;
         private readonly DeleteUserAction _action;
@@ -35,7 +35,7 @@ namespace Application.UnitTests.Actions
             Assert.True(result.IsFailure);
             Assert.Contains(
                 UserErrors.NotFound(InvalidId),
-                result.Errors );
+                result.Errors);
 
             _mockedSender.Verify(
                 x => x.Send(It.IsAny<DeleteUserCommand>(), default),
@@ -46,7 +46,7 @@ namespace Application.UnitTests.Actions
         public async Task Execute_ShouldReturnSuccessResult_WhenAllIsValid()
         {
             //Arrange
-            string UserId= Guid.NewGuid().ToString();
+            string UserId = Guid.NewGuid().ToString();
 
             //Act
             var result = await _action.Execute(UserId);

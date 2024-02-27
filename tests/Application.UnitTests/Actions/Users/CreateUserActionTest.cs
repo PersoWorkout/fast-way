@@ -6,7 +6,7 @@ using Domain.DTOs.Users.Request;
 using MediatR;
 using Moq;
 
-namespace Application.UnitTests.Actions
+namespace Application.UnitTests.Actions.Users
 {
     public class CreateUserActionTest
     {
@@ -14,7 +14,8 @@ namespace Application.UnitTests.Actions
         private readonly Mock<ISender> _mockedSender;
         private readonly CreateUserAction _action;
 
-        public CreateUserActionTest() {
+        public CreateUserActionTest()
+        {
             _mockedSender = new Mock<ISender>();
             _action = new(
                 _mockedSender.Object,
@@ -28,9 +29,9 @@ namespace Application.UnitTests.Actions
             //Arrange
             var request = new CreateUserRequest()
             {
-                Firstname = string.Empty, 
-                Lastname = string.Empty, 
-                Email = string.Empty, 
+                Firstname = string.Empty,
+                Lastname = string.Empty,
+                Email = string.Empty,
                 Password = string.Empty
             };
 

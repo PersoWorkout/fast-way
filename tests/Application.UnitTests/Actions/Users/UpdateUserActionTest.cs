@@ -8,7 +8,7 @@ using Domain.DTOs.Users.Response;
 using MediatR;
 using Moq;
 
-namespace Application.UnitTests.Actions
+namespace Application.UnitTests.Actions.Users
 {
     public class UpdateUserActionTest
     {
