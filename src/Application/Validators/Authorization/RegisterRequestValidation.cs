@@ -1,15 +1,18 @@
-﻿using Domain.DTOs.Users.Request;
+﻿using Domain.DTOs.Authorization.Requests;
 using Domain.Errors;
 using Domain.ValueObjects;
 using FluentValidation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Application.Validators.Users
+namespace Application.Validators.Authorization
 {
-    public class CreateUserRequestValidator: AbstractValidator<CreateUserRequest>
+    public class RegisterRequestValidation: AbstractValidator<RegisterRequest>
     {
-        public CreateUserRequestValidator() 
-        {
-
+        public RegisterRequestValidation() {
             RuleFor(x => x.Firstname)
                 .NotEmpty()
                 .WithErrorCode("Firstname.Empty")
@@ -38,10 +41,6 @@ namespace Application.Validators.Users
                 .WithErrorCode(PasswordErrors.Invalid.Code)
                 .WithMessage(PasswordErrors.Invalid.Description);
 
-            RuleFor(x => x.Password)
-                .Equal(x => x.Password)
-                .WithErrorCode(PasswordErrors.InvalidConfirmation.Code)
-                .WithMessage(PasswordErrors.InvalidConfirmation.Description);
         }
     }
 }
