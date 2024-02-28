@@ -1,16 +1,12 @@
 ﻿using Application.Commands.Authorization;
 using Application.Handlers.Authorization;
 using Application.Interfaces;
+using Application.Services.Authorization;
 using Application.UnitTests.Configuration.Mappers;
 using Domain.Errors;
 using Domain.Models;
 using Domain.ValueObjects;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.Handlers.Authorization
 {
@@ -84,6 +80,15 @@ namespace Application.UnitTests.Handlers.Authorization
                     Password = command.Password
                 });
 
+            _mockedAuthRepository.Setup(
+                x => x.CreateSession(It.IsAny<Guid>(), It.IsAny<string>()))
+                .ReturnsAsync(new Session
+                {
+                    UserId = Guid.NewGuid(),
+                    Token = TokenService.Generate(),
+                    ExpiredAt = DateTime.Now.AddMinutes(30)
+                });
+
             //Act
             var result = await _handler.Handle(command, default);
 
@@ -97,8 +102,6 @@ namespace Application.UnitTests.Handlers.Authorization
             _mockedAuthRepository.Verify(
                 x => x.CreateSession(It.IsAny<Guid>(), It.IsAny<string>()),
                 Times.Once);
-
-
         }
     }
 }

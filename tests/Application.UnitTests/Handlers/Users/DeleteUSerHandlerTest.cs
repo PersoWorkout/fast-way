@@ -7,15 +7,19 @@ using Moq;
 
 namespace Application.UnitTests.Handlers.Users
 {
-    public class DeleteUSerHandlerTest
+    public class DeleteUserHandlerTest
     {
         private readonly Mock<IUserRepository> _mockedUserRepository;
+        private readonly Mock<IAuthorizationRepository> _mockedAuthRepository;
         private readonly DeleteUserHandler _handler;
 
-        public DeleteUSerHandlerTest()
+        public DeleteUserHandlerTest()
         {
             _mockedUserRepository = new Mock<IUserRepository>();
-            _handler = new(_mockedUserRepository.Object);
+            _mockedAuthRepository = new Mock<IAuthorizationRepository>();
+            _handler = new(
+                _mockedUserRepository.Object,
+                _mockedAuthRepository.Object);
         }
 
         [Fact]
@@ -38,10 +42,14 @@ namespace Application.UnitTests.Handlers.Users
             Assert.Contains(
                 UserErrors.NotFound(userId.ToString()),
                 result.Errors);
+
+            _mockedAuthRepository.Verify(
+                x => x.DestroyByUser(It.IsAny<Guid>()),
+                Times.Never());
         }
 
         [Fact]
-        public async Task Handle_ReturnResultFailure_WhenAllIsValid()
+        public async Task Handle_ReturnResultSuccess_WhenAllIsValid()
         {
             var userId = Guid.NewGuid();
 
@@ -56,6 +64,10 @@ namespace Application.UnitTests.Handlers.Users
 
             //Assert
             Assert.True(result.IsSucess);
+
+            _mockedAuthRepository.Verify(
+                x => x.DestroyByUser(It.IsAny<Guid>()),
+                Times.Once());
         }
     }
 }

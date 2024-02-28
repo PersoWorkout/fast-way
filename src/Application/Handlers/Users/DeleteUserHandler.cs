@@ -9,10 +9,12 @@ namespace Application.Handlers.Users
     public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Result<object>>
     {
         private readonly IUserRepository _userRepository;
-        
-        public DeleteUserHandler(IUserRepository userRepository)
+        private readonly IAuthorizationRepository _authorizationRepository;
+
+        public DeleteUserHandler(IUserRepository userRepository, IAuthorizationRepository authorizationRepository)
         {
             _userRepository = userRepository;
+            _authorizationRepository = authorizationRepository;
         }
 
         public async Task<Result<object>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
@@ -22,6 +24,8 @@ namespace Application.Handlers.Users
                 return Result<object>.Failure(
                     UserErrors.NotFound(
                         request.Id.ToString()));
+
+            await _authorizationRepository.DestroyByUser(user.Id);
 
             await _userRepository.Delete(user);
 
