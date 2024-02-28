@@ -19,6 +19,14 @@ namespace Application.Mappers
                     opt => opt.MapFrom(
                         src => PasswordValueObject.Create(src.Password).Data));
 
+            CreateMap<LoginRequest, LoginCommand>()
+                .ForMember(dest => dest.Email,
+                    opt => opt.MapFrom(
+                        src => EmailValueObject.Create(src.Email).Data))
+                .ForMember(dest => dest.Password,
+                    opt => opt.MapFrom(
+                        src => PasswordValueObject.Create(src.Password).Data));
+
             CreateMap<RegisterCommand, User>();
 
             CreateMap<Session, ConnectedResponse>();
