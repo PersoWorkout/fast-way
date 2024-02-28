@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Authorization;
 using AutoMapper;
+using Domain.DTOs.Authorization;
 using Domain.DTOs.Authorization.Requests;
 using Domain.Models;
 using Domain.ValueObjects;
@@ -19,6 +20,8 @@ namespace Application.Mappers
                         src => PasswordValueObject.Create(src.Password).Data));
 
             CreateMap<RegisterCommand, User>();
+
+            CreateMap<Session, ConnectedResponse>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Application.Commands.Authorization;
 using AutoMapper;
 using Domain.Abstractions;
+using Domain.DTOs.Authorization;
 using Domain.DTOs.Authorization.Requests;
 using FluentValidation;
 using MediatR;
@@ -20,12 +21,12 @@ namespace Application.Actions.Authorization
             _validator = validator;
         }
 
-        public async Task<Result<object>> Execute(RegisterRequest request)
+        public async Task<Result<ConnectedResponse>> Execute(RegisterRequest request)
         {
             var requestValidation = _validator.Validate(request);
             if(!requestValidation.IsValid) 
             {
-                return Result<object>.Failure(
+                return Result<ConnectedResponse>.Failure(
                     requestValidation.Errors.Select(
                         x => new Error(x.ErrorCode, x.ErrorMessage))
                     .ToList());

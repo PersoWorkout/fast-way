@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Services.Authorization;
 using AutoMapper;
 using Domain.Abstractions;
+using Domain.DTOs.Authorization;
 using Domain.Errors;
 using Domain.Models;
 using Domain.ValueObjects;
@@ -10,7 +11,7 @@ using MediatR;
 
 namespace Application.Handlers.Authorization
 {
-    public class RegisterHandler : IRequestHandler<RegisterCommand, Result<object>>
+    public class RegisterHandler : IRequestHandler<RegisterCommand, Result<ConnectedResponse>>
     {
         private readonly IAuthorizationRepository _authRepository;
         private readonly IUserRepository _userRepository;
@@ -24,10 +25,10 @@ namespace Application.Handlers.Authorization
             _mapper = mapper;
         }
 
-        public async Task<Result<object>> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ConnectedResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             if (await _userRepository.EmailAlreadyUsed(request.Email.Value))
-                return Result<object>.Failure(EmailErrors.Invalid);
+                return Result<ConnectedResponse>.Failure(EmailErrors.Invalid);
 
             string hashedPassword = HashService.Hash(password: request.Password.Value)!;
 
@@ -40,9 +41,10 @@ namespace Application.Handlers.Authorization
             var token = TokenService.Generate();
             var hashedToken = HashService.Hash(token)!;
 
-            await _authRepository.CreateSession(user.Id, hashedToken);
+            var session = await _authRepository.CreateSession(user.Id, hashedToken);
 
-            return Result<object>.Success();
+            return Result<ConnectedResponse>.Success(
+                _mapper.Map<ConnectedResponse>(session));
         }
     }
 }
