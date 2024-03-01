@@ -13,6 +13,8 @@ namespace Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             services.AddDbContext<ApplicationDbContext>(option =>
                 option.UseNpgsql(configuration
                     .GetConnectionString("DatabaseConnection")));
