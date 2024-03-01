@@ -32,12 +32,12 @@ namespace Application.UnitTests.Handlers.Users
             {
                 Firstname = "john",
                 Lastname = "Doe",
-                Email = EmailValueObject.Create("john.doe@example.com").Data,
-                Password = PasswordValueObject.Create("Password123!").Data
+                Email = EmailValueObject.Create("john.doe@example.com").Data!,
+                Password = PasswordValueObject.Create("Password123!").Data!
             };
 
             _mockedUserRepository.Setup(
-                x => x.EmailAlreadyUsed(It.IsAny<string>()))
+                x => x.EmailAlreadyUsed(It.IsAny<EmailValueObject>()))
                 .ReturnsAsync(true);
 
             //Act
@@ -56,12 +56,12 @@ namespace Application.UnitTests.Handlers.Users
             {
                 Firstname = "john",
                 Lastname = "Doe",
-                Email = EmailValueObject.Create("john.doe@example.com").Data,
-                Password = PasswordValueObject.Create("Password123!").Data
+                Email = EmailValueObject.Create("john.doe@example.com").Data!,
+                Password = PasswordValueObject.Create("Password123!").Data!
             };
 
             _mockedUserRepository.Setup(
-                x => x.EmailAlreadyUsed(It.IsAny<string>()))
+                x => x.EmailAlreadyUsed(It.IsAny<EmailValueObject>()))
                 .ReturnsAsync(false);
 
             _mockedUserRepository.Setup(

@@ -27,7 +27,7 @@ namespace Application.Handlers.Authorization
 
         public async Task<Result<ConnectedResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            if (await _userRepository.EmailAlreadyUsed(request.Email.Value))
+            if (await _userRepository.EmailAlreadyUsed(request.Email))
                 return Result<ConnectedResponse>.Failure(EmailErrors.Invalid);
 
             string hashedPassword = HashService.Hash(password: request.Password.Value)!;

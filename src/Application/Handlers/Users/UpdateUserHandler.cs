@@ -26,7 +26,7 @@ namespace Application.Handlers.Users
 
         public async Task<Result<UserDetails>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            if (await _userRepository.EmailAlreadyUsed(request.Email.Value))
+            if (await _userRepository.EmailAlreadyUsed(request.Email))
                 return Result<UserDetails>.Failure(
                     EmailErrors.Invalid);
 

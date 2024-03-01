@@ -39,7 +39,7 @@ namespace Application.UnitTests.Handlers.Authorization
             };
 
             _mockedUserRepository.Setup(
-                x => x.EmailAlreadyUsed(command.Email.Value))
+                x => x.EmailAlreadyUsed(command.Email))
                 .ReturnsAsync(true);
 
             //Act
@@ -67,7 +67,7 @@ namespace Application.UnitTests.Handlers.Authorization
             };
 
             _mockedUserRepository.Setup(
-                x => x.EmailAlreadyUsed(command.Email.Value))
+                x => x.EmailAlreadyUsed(command.Email))
                 .ReturnsAsync(false);
 
             _mockedUserRepository.Setup(
