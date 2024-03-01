@@ -81,13 +81,10 @@ namespace Application.UnitTests.Handlers.Authorization
                 });
 
             _mockedAuthRepository.Setup(
-                x => x.CreateSession(It.IsAny<Guid>(), It.IsAny<string>()))
-                .ReturnsAsync(new Session
-                {
-                    UserId = Guid.NewGuid(),
-                    Token = TokenService.Generate(),
-                    ExpiredAt = DateTime.Now.AddMinutes(30)
-                });
+                x => x.CreateSession(It.IsAny<Session>()))
+                .ReturnsAsync(new Session(
+                    Guid.NewGuid(),
+                    TokenService.Generate()));
 
             //Act
             var result = await _handler.Handle(command, default);
@@ -100,7 +97,7 @@ namespace Application.UnitTests.Handlers.Authorization
                 Times.Once);
 
             _mockedAuthRepository.Verify(
-                x => x.CreateSession(It.IsAny<Guid>(), It.IsAny<string>()),
+                x => x.CreateSession(It.IsAny<Session>()),
                 Times.Once);
         }
     }

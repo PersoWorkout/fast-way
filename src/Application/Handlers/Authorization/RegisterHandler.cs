@@ -41,7 +41,11 @@ namespace Application.Handlers.Authorization
             var token = TokenService.Generate();
             var hashedToken = HashService.Hash(token)!;
 
-            var session = await _authRepository.CreateSession(user.Id, hashedToken);
+            var session = await _authRepository.CreateSession(
+                new Session(
+                    user.Id, 
+                    hashedToken));
+
             session.Token = token;
 
             return Result<ConnectedResponse>.Success(

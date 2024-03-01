@@ -1,9 +1,9 @@
 ﻿namespace Domain.Models
 {
-    public class Session
+    public class Session(Guid userId, string token)
     {
-        public Guid UserId { get; set; }
-        public string Token { get; set; }
-        public DateTime ExpiredAt { get; set; }
+        public Guid UserId { get; set; } = userId;
+        public string Token { get; set; } = token;
+        public DateTime ExpiredAt { get; set; } = DateTime.Now.AddHours(1);
     }
 }

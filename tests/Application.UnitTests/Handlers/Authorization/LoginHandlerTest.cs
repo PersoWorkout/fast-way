@@ -95,13 +95,10 @@ namespace Application.UnitTests.Handlers.Authorization
                 .ReturnsAsync(existingUser);
 
             _mockedAuthorizationRepository.Setup(
-                x => x.CreateSession(It.IsAny<Guid>(), It.IsAny<string>()))
-                .ReturnsAsync(new Session()
-                {
-                    UserId = existingUser.Id,
-                    Token = TokenService.Generate(),
-                    ExpiredAt = DateTime.Now.AddMinutes(30)
-                }); ;
+                x => x.CreateSession(It.IsAny<Session>()))
+                .ReturnsAsync(new Session(
+                    existingUser.Id,
+                    TokenService.Generate())); ;
 
             //Assert
             var result = await _handler.Handle(command, default);
@@ -111,7 +108,7 @@ namespace Application.UnitTests.Handlers.Authorization
             Assert.IsType<ConnectedResponse>(result.Data);
 
             _mockedAuthorizationRepository.Verify(
-                x => x.CreateSession(It.IsAny<Guid>(), It.IsAny<string>()),
+                x => x.CreateSession(It.IsAny<Session>()),
                 Times.Once());
         }
 

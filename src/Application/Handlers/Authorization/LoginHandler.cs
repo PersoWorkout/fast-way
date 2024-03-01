@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Abstractions;
 using Domain.DTOs.Authorization;
 using Domain.Errors;
+using Domain.Models;
 using MediatR;
 
 namespace Application.Handlers.Authorization
@@ -41,7 +42,10 @@ namespace Application.Handlers.Authorization
             var token = TokenService.Generate();
             var hashedToken = HashService.Hash(token)!;
 
-            var session = await _authorizationRepository.CreateSession(user.Id, hashedToken);
+            var session = await _authorizationRepository.CreateSession(
+                new Session(
+                    user.Id, 
+                    hashedToken));
 
             session.Token = token;
 
