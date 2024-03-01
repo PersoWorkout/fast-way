@@ -1,44 +1,64 @@
 ﻿using Application.Interfaces;
 using Domain.Models;
 using Domain.ValueObjects;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public Task<User> Create(User user)
+        private readonly ApplicationDbContext _dbContext;
+
+        public UserRepository(ApplicationDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+            _dbContext.Users.AsNoTracking();
         }
 
-        public Task<bool> Delete(User user)
+        public async Task<List<User>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _dbContext.Users.ToListAsync();
         }
 
-        public Task<bool> EmailAlreadyUsed(string Email)
+        public async Task<User> Create(User user)
         {
-            throw new NotImplementedException();
+            var createdUser = await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
+            return createdUser.Entity;
         }
 
-        public Task<List<User>> GetAll()
+        public async Task<User?> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Users.FindAsync(id);
         }
 
-        public Task<User> GetByEmail(EmailValueObject email)
+        public async Task<bool> EmailAlreadyUsed(EmailValueObject email)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Users.AnyAsync(
+                x => x.Email.Value == email.Value);
         }
 
-        public Task<User> GetById(Guid id)
+        public async Task<User?> GetByEmail(EmailValueObject email)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Users
+                .FirstOrDefaultAsync(
+                    x => x.Email.Value == email.Value);
         }
 
-        public Task<User> Update(User user)
+        public async Task<User> Update(User user)
         {
-            throw new NotImplementedException();
+            var result = _dbContext.Update(user);
+            await _dbContext.SaveChangesAsync();
+
+            return result.Entity;
+        }
+
+        public async Task<int> Delete(User user)
+        {
+            _dbContext.Users.Remove(user);
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

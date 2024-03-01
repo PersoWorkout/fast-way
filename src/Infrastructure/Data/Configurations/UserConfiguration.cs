@@ -10,13 +10,14 @@ namespace Infrastructure.Data.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            builder.OwnsOne(x => x.Email)
-                .Property(x => x.Value)
-                .HasColumnName("Email");
+            builder.OwnsOne(x => x.Email, email =>
+            {
+                email.Property(x => x.Value)
+                    .HasColumnName("Email");
 
-            builder.OwnsOne(x => x.Email)
-                .HasIndex(x => x.Value)
-                .IsUnique();
+                email.HasIndex(x => x.Value)
+                    .IsUnique();
+            });     
 
             builder.ComplexProperty(x => x.Password)
                 .Property(x => x.Value)

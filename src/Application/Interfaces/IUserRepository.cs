@@ -11,6 +11,6 @@ namespace Application.Interfaces
         Task<User?> GetByEmail(EmailValueObject email);
         Task<bool> EmailAlreadyUsed(EmailValueObject email);
         Task<User> Update(User user);
-        Task<bool> Delete(User user);
+        Task<int> Delete(User user);
     }
 }
