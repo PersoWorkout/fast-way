@@ -1,5 +1,7 @@
 using Application;
 using Infrastructure;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using var scope = app.Services.CreateScope();
+
+var database = scope.ServiceProvider
+    .GetRequiredService<ApplicationDbContext>()
+    .Database;
+database.Migrate();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -30,3 +39,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
