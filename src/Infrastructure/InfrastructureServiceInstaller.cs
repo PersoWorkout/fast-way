@@ -1,4 +1,6 @@
-﻿using Infrastructure.Data;
+﻿using Application.Interfaces;
+using Infrastructure.Data;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +10,7 @@ namespace Infrastructure
     public static class InfrastructureServiceInstaller
     {
         public static IServiceCollection InstallInfrastructureServices(
-            this ServiceCollection services,
+            this IServiceCollection services,
             IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(option =>
@@ -17,6 +19,9 @@ namespace Infrastructure
 
             services.AddDbContext<AuthDbContext>(option =>
                 option.UseInMemoryDatabase("AuthDatabase"));
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
 
             return services;
         }
