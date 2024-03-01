@@ -1,18 +1,12 @@
-﻿using Infrastructure.Data;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.IntegrationTests
 {
-    public abstract class BaseIntegrationTest : IClassFixture<IntegrationWebApplicationFactory>
+    public abstract class BaseIntegrationTest(
+        IntegrationWebApplicationFactory factory) : 
+        IClassFixture<IntegrationWebApplicationFactory>
     {
-        protected readonly IServiceScope _scope;
-        protected readonly ApplicationDbContext _dbContext;
-        public BaseIntegrationTest(IntegrationWebApplicationFactory factory)
-        {
-            _scope = factory.Services.CreateScope();
-            _dbContext = _scope.ServiceProvider
-                .GetRequiredService<ApplicationDbContext>();
-            _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
-        }
+        protected readonly IServiceScope _scope = 
+            factory.Services.CreateScope();
     }
 }

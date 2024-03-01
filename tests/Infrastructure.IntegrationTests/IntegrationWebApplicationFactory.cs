@@ -37,6 +37,18 @@ namespace Infrastructure.IntegrationTests
 
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseNpgsql(_dbContainer.GetConnectionString()));
+
+                var memoryDescriptor = services.SingleOrDefault(x =>
+                    x.ServiceType == typeof(
+                        DbContextOptions<AuthDbContext>));
+
+                if(memoryDescriptor is not null)
+                {
+                    services.Remove(memoryDescriptor);
+                }
+
+                services.AddDbContext<AuthDbContext>(options =>
+                    options.UseInMemoryDatabase("IntegrationAuthDbTest"));
             });
         }
 

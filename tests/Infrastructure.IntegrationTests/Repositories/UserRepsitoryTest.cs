@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces;
-using AutoMapper.Execution;
 using Domain.Models;
 using Domain.ValueObjects;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,11 +10,16 @@ namespace Infrastructure.IntegrationTests.Repositories
     public class UserRepsitoryTest : BaseIntegrationTest
     {
         private readonly IUserRepository _userRepository;
-        public UserRepsitoryTest(IntegrationWebApplicationFactory factory) : 
+        protected readonly ApplicationDbContext _dbContext;
+
+        public UserRepsitoryTest(IntegrationWebApplicationFactory factory) :
             base(factory)
         {
             _userRepository = _scope.ServiceProvider
                 .GetRequiredService<IUserRepository>();
+
+            _dbContext = _scope.ServiceProvider
+                .GetRequiredService<ApplicationDbContext>();
         }
 
         private const string DEFAULT_FIRSTNAME = "John";

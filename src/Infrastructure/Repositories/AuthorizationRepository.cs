@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Models;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -13,33 +14,39 @@ namespace Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Session> CreateSession(Guid userId, string token)
+        public async Task<Session> CreateSession(Session session)
         {
-            var session = new Session
-            {
-                UserId = userId,
-                Token = token,
-                ExpiredAt = DateTime.Now.AddHours(1),
-            };
-
             var result = await _dbContext.Sessions.AddAsync(session);
             await _dbContext.SaveChangesAsync();
 
             return result.Entity;
         }
-        public Task<Session> GetByToken(string token)
+        public async Task<Session?> GetByToken(string token)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Sessions.FirstOrDefaultAsync(
+                 session => session.Token == token);
         }
 
-        public Task DestroyByToken(string token)
+        public async Task DestroyByToken(string token)
         {
-            throw new NotImplementedException();
+            var session = await _dbContext.Sessions
+                .FirstOrDefaultAsync(x => x.Token == token);
+
+            if(session is not null)
+            {
+                _dbContext.Remove(session);
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
-        public Task DestroyByUser(Guid userId)
+        public async Task DestroyByUser(Guid userId)
         {
-            throw new NotImplementedException();
+            var sessions = await _dbContext.Sessions.Where(
+                x => x.UserId == userId).ToListAsync();
+
+            _dbContext.Sessions.RemoveRange(sessions);
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
