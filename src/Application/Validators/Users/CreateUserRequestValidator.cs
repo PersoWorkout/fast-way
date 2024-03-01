@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.Users.Request;
+using Domain.Enums;
 using Domain.Errors;
 using Domain.ValueObjects;
 using FluentValidation;
@@ -36,7 +37,16 @@ namespace Application.Validators.Users
                     PasswordValueObject
                         .Create(password).IsSucess)
                 .WithErrorCode(PasswordErrors.Invalid.Code)
-                .WithMessage(PasswordErrors.Invalid.Description);          
+                .WithMessage(PasswordErrors.Invalid.Description);
+
+            RuleFor(x => x.Role)
+                .NotNull()
+                .WithErrorCode("Role.Empty")
+                .WithMessage("'Role' must not be empty.")
+                .Must(x =>
+                    Enum.IsDefined(typeof(UserRoles), x))
+                .WithErrorCode("Role.Invalid")
+                .WithMessage("'Role' is not a valid user roles.");
         }
     }
 }

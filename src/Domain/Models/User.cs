@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Domain.Enums;
 using Domain.ValueObjects;
 
 namespace Domain.Models
@@ -9,6 +10,7 @@ namespace Domain.Models
         public string Lastname { get; set; }
         public EmailValueObject Email { get; set; }
         public PasswordValueObject Password { get; set; }
+        public UserRoles Role {  get; set; } = UserRoles.Client;
 
         public void Update(
             string? firstname = null,
