@@ -3,6 +3,7 @@ using AutoMapper;
 using Domain.Abstractions;
 using Domain.DTOs.Users.Request;
 using Domain.DTOs.Users.Response;
+using Domain.Errors;
 using FluentValidation;
 using MediatR;
 
@@ -17,8 +18,14 @@ namespace Application.Actions.Users
         private readonly IMapper _mapper = mapper;
         private readonly IValidator<UpdateUserRequest> _validator = validator;
 
-        public async Task<Result<UserDetails>> Execute(UpdateUserRequest request)
+        public async Task<Result<UserDetails>> Execute(string userId, UpdateUserRequest request)
         {
+            if (!Guid.TryParse(userId, out var parsedId))
+            {
+                return Result<UserDetails>.Failure(
+                    UserErrors.NotFound(userId));
+            }
+
             var requestValidation = _validator.Validate(request);
             if (!requestValidation.IsValid)
                 return Result<UserDetails>
@@ -27,8 +34,10 @@ namespace Application.Actions.Users
                             new Error(x.ErrorCode, x.ErrorMessage))
                         .ToList());
 
-            return await _sender.Send(
-                _mapper.Map<UpdateUserCommand>(request));
+            var command = _mapper.Map<UpdateUserCommand>(request);
+            command.Id = parsedId;
+
+            return await _sender.Send(command);
         }
     }
 }

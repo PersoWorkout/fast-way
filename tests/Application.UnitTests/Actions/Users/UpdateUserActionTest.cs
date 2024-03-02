@@ -36,11 +36,39 @@ namespace Application.UnitTests.Actions.Users
                 Password = "password",
             };
 
+            var userId = Guid.NewGuid();
+
             //Act
-            var result = await _action.Execute(request);
+            var result = await _action.Execute(userId.ToString(),request);
 
             //Assert
             Assert.True(result.IsFailure);
+
+            _mockedSender.Verify(
+                x => x.Send(It.IsAny<UpdateUserCommand>(), default),
+                Times.Never);
+        }
+
+        [Fact]
+        public async Task Execute_ShouldReturnFailureResult_WhenUserIdIsNotValidGuid()
+        {
+            //Arrange
+            var request = new UpdateUserRequest()
+            {
+                Firstname = "John",
+                Lastname = "Doe",
+                Email = "john.doe",
+                Password = "password",
+            };
+
+            var userId = "Invalid Guid";
+
+            //Act
+            var result = await _action.Execute(userId, request);
+
+            //Assert
+            Assert.True(result.IsFailure);
+
             _mockedSender.Verify(
                 x => x.Send(It.IsAny<UpdateUserCommand>(), default),
                 Times.Never);
@@ -55,15 +83,18 @@ namespace Application.UnitTests.Actions.Users
                 Password = "Password123!",
             };
 
+            var userId = Guid.NewGuid();
+
             _mockedSender.Setup(
                 x => x.Send(It.IsAny<UpdateUserCommand>(), default))
-                .ReturnsAsync(Result<UserDetails>.Success());
+                .ReturnsAsync(Result<UserDetails>.Success());            
 
             //Act
-            var result = await _action.Execute(request);
+            var result = await _action.Execute(userId.ToString(), request);
 
             //Assert
             Assert.True(result.IsSucess);
+
             _mockedSender.Verify(
                 x => x.Send(It.IsAny<UpdateUserCommand>(), default),
                 Times.Once);
