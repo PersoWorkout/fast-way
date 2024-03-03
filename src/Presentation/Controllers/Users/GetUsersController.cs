@@ -1,5 +1,7 @@
 ﻿using Application.Actions.Users;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Authentication.Attributes;
+using Presentation.Authorization.Attributes;
 
 namespace Presentation.Controllers.Users
 {
@@ -14,6 +16,7 @@ namespace Presentation.Controllers.Users
             _action = action;
         }
 
+        [Admin]
         [HttpGet]
         public async Task<IResult> Handle()
         {

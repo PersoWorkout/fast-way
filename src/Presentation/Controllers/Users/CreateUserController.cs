@@ -1,6 +1,7 @@
 ﻿using Application.Actions.Users;
 using Domain.DTOs.Users.Request;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Authorization.Attributes;
 
 namespace Presentation.Controllers.Users
 {
@@ -15,6 +16,7 @@ namespace Presentation.Controllers.Users
             _action = action;
         }
 
+        [Admin]
         [HttpPost]
         public async Task<IResult> Handle([FromBody] CreateUserRequest request)
         {

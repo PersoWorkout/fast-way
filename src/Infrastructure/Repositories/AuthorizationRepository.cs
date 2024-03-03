@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
         public async Task DestroyByToken(string token)
         {
             var session = await _dbContext.Sessions
-                .FirstOrDefaultAsync(x => x.Token == token);
+                .FirstOrDefaultAsync(x => _hashService.Verify(token, x.Token));
 
             if(session is not null)
             {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Authentication
 {
     [ApiController]
-    [Route("/auth/register")]
+    [Route("auth/register")]
     public class RegisterController : Controller
     {
         private readonly RegisterAction _action;

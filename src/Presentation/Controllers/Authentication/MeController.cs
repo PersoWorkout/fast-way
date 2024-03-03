@@ -1,33 +1,32 @@
-﻿using Application.Actions.Authorization;
+﻿using Application.Actions.Users;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Authentication.Attributes;
 
 namespace Presentation.Controllers.Authentication
 {
     [ApiController]
-    [Route("auth/logout")]
-    public class LogoutController : Controller
+    [Route("auth/me")]
+    public class MeController : Controller
     {
-        private readonly LogoutAction _action;
-
-        public LogoutController(LogoutAction action)
+        private readonly GetUserByIdAction _action;
+        
+        public MeController(GetUserByIdAction action)
         {
             _action = action;
         }
 
         [Authenticated]
-        [HttpDelete]
-        public async Task<IResult> Handler()
+        [HttpGet]
+        public async Task<IResult> Handle()
         {
-            var token = HttpContext.Request
-                .Headers
-                .Authorization
+            var userId = HttpContext
+                .Items["userId"]!
                 .ToString();
 
-            var result = await _action.Execute(token);
+            var result = await _action.Execute(userId!);
 
             return result.IsSucess ? 
-                Results.NoContent() :
+                Results.Ok(result.Data) : 
                 Results.Problem(
                     statusCode: StatusCodes.Status400BadRequest,
                     title: "BadRequest",

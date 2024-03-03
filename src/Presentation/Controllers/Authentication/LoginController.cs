@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Authentication
 {
     [ApiController]
-    [Route("/auth/login")]
+    [Route("auth/login")]
     public class LoginController : Controller
     {
         private readonly LoginAction _action;
