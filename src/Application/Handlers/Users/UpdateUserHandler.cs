@@ -5,11 +5,6 @@ using Domain.Abstractions;
 using Domain.DTOs.Users.Response;
 using Domain.Errors;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Handlers.Users
 {
@@ -26,7 +21,8 @@ namespace Application.Handlers.Users
 
         public async Task<Result<UserDetails>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            if (await _userRepository.EmailAlreadyUsed(request.Email))
+            if (request.Email is not null && 
+                await _userRepository.EmailAlreadyUsed(request.Email))
                 return Result<UserDetails>.Failure(
                     EmailErrors.Invalid);
 
