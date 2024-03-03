@@ -6,6 +6,7 @@ using Domain.DTOs.Users.Response;
 using Domain.Errors;
 using FluentValidation;
 using MediatR;
+using System.Net;
 
 namespace Application.Actions.Users
 {
@@ -23,7 +24,8 @@ namespace Application.Actions.Users
             if (!Guid.TryParse(userId, out var parsedId))
             {
                 return Result<UserDetails>.Failure(
-                    UserErrors.NotFound(userId));
+                    UserErrors.NotFound(userId),
+                    HttpStatusCode.NotFound);
             }
 
             var requestValidation = _validator.Validate(request);

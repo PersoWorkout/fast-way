@@ -1,6 +1,5 @@
 ﻿using Application.Actions.Users;
 using Microsoft.AspNetCore.Mvc;
-using Presentation.Authentication.Attributes;
 using Presentation.Authorization.Attributes;
 
 namespace Presentation.Controllers.Users

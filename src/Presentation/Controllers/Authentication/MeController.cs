@@ -1,6 +1,7 @@
 ﻿using Application.Actions.Users;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Authentication.Attributes;
+using Presentation.Extensions;
 
 namespace Presentation.Controllers.Authentication
 {
@@ -25,15 +26,9 @@ namespace Presentation.Controllers.Authentication
 
             var result = await _action.Execute(userId!);
 
-            return result.IsSucess ? 
-                Results.Ok(result.Data) : 
-                Results.Problem(
-                    statusCode: StatusCodes.Status400BadRequest,
-                    title: "BadRequest",
-                    extensions: new Dictionary<string, object?>()
-                    {
-                        {"errors", result.Errors }
-                    });
-        }
+            return result.IsSucess ?
+                Results.Ok(result.Data) :
+                ResultsExtensions.FailureResult(result);
+            }
     }
 }

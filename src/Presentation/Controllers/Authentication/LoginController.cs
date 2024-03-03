@@ -1,6 +1,7 @@
 ﻿using Application.Actions.Authorization;
 using Domain.DTOs.Authorization.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Extensions;
 
 namespace Presentation.Controllers.Authentication
 {
@@ -22,13 +23,7 @@ namespace Presentation.Controllers.Authentication
 
             return result.IsSucess ?
                 Results.Ok(result.Data) :
-                Results.Problem(
-                    statusCode: StatusCodes.Status404NotFound,
-                    title: "Bad Request",
-                    extensions: new Dictionary<string, object?>()
-                    {
-                        {"errors", result.Errors }
-                    });
+                ResultsExtensions.FailureResult(result);
         }
     }
 }

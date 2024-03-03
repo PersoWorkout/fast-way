@@ -1,6 +1,7 @@
 ﻿using Application.Actions.Users;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Authorization.Attributes;
+using Presentation.Extensions;
 
 namespace Presentation.Controllers.Users
 {
@@ -23,13 +24,7 @@ namespace Presentation.Controllers.Users
 
             return result.IsSucess ?
                 Results.NoContent() :
-                Results.Problem(
-                    statusCode: StatusCodes.Status400BadRequest,
-                    title: "Bad Request",
-                    extensions: new Dictionary<string, object?>()
-                    {
-                        {"errors", result.Errors }
-                    });
+                ResultsExtensions.FailureResult(result);
         }
     }
 }

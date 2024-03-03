@@ -1,5 +1,6 @@
 ﻿using Application.Actions.Users;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Extensions;
 using Presentation.Authorization.Attributes;
 
 namespace Presentation.Controllers.Users
@@ -24,8 +25,8 @@ namespace Presentation.Controllers.Users
             return result.IsSucess ?
                 Results.Ok(result.Data) :
                 Results.Problem(
-                    statusCode: StatusCodes.Status400BadRequest,
-                    title: "Bad Request",
+                    statusCode: (int)result.StatusCode,
+                    title: result.StatusCode.GetDisplayName(),
                     extensions: new Dictionary<string, object?>()
                     {
                         {"errors", result.Errors }

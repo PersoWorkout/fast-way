@@ -5,6 +5,7 @@ using Domain.Abstractions;
 using Domain.DTOs.Users.Response;
 using Domain.Errors;
 using MediatR;
+using System.Net;
 
 namespace Application.Handlers.Users
 {
@@ -26,7 +27,8 @@ namespace Application.Handlers.Users
             var user = await _userRepository.GetById(request.Id);
             if (user is null)
                 return Result<UserDetails>.Failure(
-                    UserErrors.NotFound(request.Id.ToString()));
+                    UserErrors.NotFound(request.Id.ToString()),
+                    HttpStatusCode.NotFound);
 
             return Result<UserDetails>.Success(
                 _mapper.Map<UserDetails>(user));

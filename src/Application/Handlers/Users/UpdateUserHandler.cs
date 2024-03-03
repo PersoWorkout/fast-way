@@ -5,6 +5,7 @@ using Domain.Abstractions;
 using Domain.DTOs.Users.Response;
 using Domain.Errors;
 using MediatR;
+using System.Net;
 
 namespace Application.Handlers.Users
 {
@@ -30,7 +31,8 @@ namespace Application.Handlers.Users
             if(user is null)
                 return Result<UserDetails>
                     .Failure(UserErrors.NotFound(
-                        request.Id.ToString()));
+                        request.Id.ToString()),
+                    HttpStatusCode.NotFound);
 
             user.Update(
                 request.Firstname,

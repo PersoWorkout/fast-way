@@ -2,6 +2,7 @@
 using Domain.Abstractions;
 using Domain.Errors;
 using MediatR;
+using System.Net;
 
 namespace Application.Actions.Users
 {
@@ -13,7 +14,8 @@ namespace Application.Actions.Users
         {
             if(!Guid.TryParse(id, out var parsedId))
                 return Result<object>.Failure(
-                    UserErrors.NotFound(id));
+                    UserErrors.NotFound(id),
+                    HttpStatusCode.NotFound);
 
             return await _sender.Send(
                 new DeleteUserCommand(parsedId));

@@ -1,23 +1,35 @@
-﻿namespace Domain.Abstractions
+﻿using System.Net;
+
+namespace Domain.Abstractions
 {
     public class Result<T> where T : class?
     {
-        private Result(Error error)
+        private Result(Error error, HttpStatusCode statusCode)
         {
             IsSucess = false;
+            StatusCode = statusCode;
             Errors = [error];
         }
 
-        private Result(List<Error> errors)
+        private Result(List<Error> errors, HttpStatusCode statusCode)
         {
             IsSucess = false;
+            StatusCode = statusCode;
             Errors = errors;
         }
 
-        private Result(T? data = null)
+        private Result(HttpStatusCode statusCode)
+        {
+            IsSucess = true;
+            StatusCode = statusCode;
+            Errors = [];
+        }
+
+        private Result(T? data = null, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
 
             IsSucess = true;
+            StatusCode = statusCode;
             Errors = [Error.None];
             Data = data;
         }
@@ -29,11 +41,12 @@
         public List<Error> Errors { get; }
 
         public T? Data { get; }
+        public HttpStatusCode StatusCode { get; }
 
-        public static Result<T> Success(T data) => new(data);
-        public static Result<T> Success() => new();
+        public static Result<T> Success(T data, HttpStatusCode code = HttpStatusCode.OK) => new(data, code);
+        public static Result<T> Success(HttpStatusCode code = HttpStatusCode.OK) => new(code);
 
-        public static Result<T> Failure(Error error) => new(error);
-        public static Result<T> Failure(List<Error> errors) => new(errors);
+        public static Result<T> Failure(Error error, HttpStatusCode code = HttpStatusCode.BadRequest) => new(error, code);
+        public static Result<T> Failure(List<Error> errors, HttpStatusCode code = HttpStatusCode.BadRequest) => new(errors, code);
     }
 }

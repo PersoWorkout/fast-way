@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain.Abstractions;
 using Domain.Errors;
 using MediatR;
+using System.Net;
 
 namespace Application.Handlers.Users
 {
@@ -23,7 +24,8 @@ namespace Application.Handlers.Users
             if (user is null)
                 return Result<object>.Failure(
                     UserErrors.NotFound(
-                        request.Id.ToString()));
+                        request.Id.ToString()),
+                    HttpStatusCode.NotFound);
 
             await _authorizationRepository.DestroyByUser(user.Id);
 

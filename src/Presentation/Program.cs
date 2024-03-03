@@ -27,10 +27,10 @@ if (app.Environment.IsDevelopment())
 
 using var scope = app.Services.CreateScope();
 
-var database = scope.ServiceProvider
+scope.ServiceProvider
     .GetRequiredService<ApplicationDbContext>()
-    .Database;
-database.Migrate();
+    .Database
+    .Migrate();
 
 app.UseHttpsRedirection();
 
