@@ -9,10 +9,13 @@ namespace Infrastructure.IntegrationTests.Repositories
 {
     public class AuthorizationRepositoryTest : BaseIntegrationTest
     {
+        private readonly HashService _hashService;
         private readonly IAuthorizationRepository _authRepository;
         private readonly AuthDbContext _dbContext;
         public AuthorizationRepositoryTest(IntegrationWebApplicationFactory factory) : base(factory)
         {
+            _hashService = new HashService();
+
             _authRepository = _scope.ServiceProvider
                 .GetRequiredService<IAuthorizationRepository>();
 
@@ -65,7 +68,7 @@ namespace Infrastructure.IntegrationTests.Repositories
             var existingSession = await _dbContext.AddAsync(
                 new Session(
                     Guid.NewGuid(),
-                    TokenService.Generate()));
+                    _hashService.Hash(TokenService.Generate())));
 
             await _dbContext.SaveChangesAsync();
 
@@ -81,8 +84,8 @@ namespace Infrastructure.IntegrationTests.Repositories
         [Fact]
         public async Task GetByToken_ShouldReturnNull_WhenTokenNotExist()
         {
-            //Arrange
             //Act
+            //Arrange
             var session = await _authRepository
                 .GetByToken(TokenService.Generate());
 

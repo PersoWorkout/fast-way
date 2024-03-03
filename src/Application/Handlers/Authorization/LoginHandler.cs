@@ -15,13 +15,14 @@ namespace Application.Handlers.Authorization
         private readonly IUserRepository _userRepository;
         private readonly IAuthorizationRepository _authorizationRepository;
         private readonly IMapper _mapper;
+        private readonly HashService _hashService;
 
-
-        public LoginHandler(IUserRepository userRepository, IAuthorizationRepository authorizationRepository, IMapper mapper)
+        public LoginHandler(IUserRepository userRepository, IAuthorizationRepository authorizationRepository, IMapper mapper, HashService hashService)
         {
             _userRepository = userRepository;
             _authorizationRepository = authorizationRepository;
             _mapper = mapper;
+            _hashService = hashService;
         }
 
         public async Task<Result<ConnectedResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -33,14 +34,14 @@ namespace Application.Handlers.Authorization
                     .Failure(AuthErrors.InvalidCreadentials);
             }
 
-            if(!HashService.Verify(request.Password.Value, user.Password.Value))
+            if(!_hashService.Verify(request.Password.Value, user.Password.Value))
             {
                 return Result<ConnectedResponse>
                     .Failure(AuthErrors.InvalidCreadentials);
             }
 
             var token = TokenService.Generate();
-            var hashedToken = HashService.Hash(token)!;
+            var hashedToken = _hashService.Hash(token)!;
 
             var session = await _authorizationRepository.CreateSession(
                 new Session(
@@ -50,8 +51,6 @@ namespace Application.Handlers.Authorization
             session.Token = token;
 
             return Result<ConnectedResponse>.Success(_mapper.Map<ConnectedResponse>(session));
-
-            throw new NotImplementedException();
         }
     }
 }

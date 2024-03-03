@@ -1,14 +1,11 @@
 ﻿using Application.Services.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.Services
 {
     public class HashServiceTest
     {
+        private readonly HashService _hashService = new();
+
         [Fact]
         public void Hash_ShouldReturnHashedString()
         {
@@ -16,7 +13,7 @@ namespace Application.UnitTests.Services
             const string Password = "Password";
 
             //Act
-            var hashedPassword = HashService.Hash(Password);
+            var hashedPassword = _hashService.Hash(Password);
 
             //Assert
             Assert.NotEmpty(hashedPassword);
@@ -28,7 +25,7 @@ namespace Application.UnitTests.Services
         {
             //Arrange
             //Act
-            var hashedPassword = HashService.Hash(null);
+            var hashedPassword = _hashService.Hash(null);
 
             //Assert
             Assert.Null(hashedPassword);
@@ -44,7 +41,7 @@ namespace Application.UnitTests.Services
             string hashedValue = BCrypt.Net.BCrypt.HashPassword(FirstValue);
 
             //Arrange
-            var result = HashService.Verify(SecondValue, hashedValue);
+            var result = _hashService.Verify(SecondValue, hashedValue);
 
             //Assert
             Assert.False(result);
@@ -58,7 +55,7 @@ namespace Application.UnitTests.Services
             string hashedValue = BCrypt.Net.BCrypt.HashPassword(value);
 
             //Arrange
-            var result = HashService.Verify(value, hashedValue);
+            var result = _hashService.Verify(value, hashedValue);
 
             //Assert
             Assert.True(result);

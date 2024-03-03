@@ -1,5 +1,6 @@
 ﻿using Application.Actions.Authorization;
 using Application.Actions.Users;
+using Application.Services.Authorization;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -16,6 +17,8 @@ namespace Application
             services.AddMediatR(cfg => 
                 cfg.RegisterServicesFromAssembly(
                     Assembly.GetExecutingAssembly()));
+
+            services.AddScoped<HashService>();
 
             services.InstallUserActions();
 

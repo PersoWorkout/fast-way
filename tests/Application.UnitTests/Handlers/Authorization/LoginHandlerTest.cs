@@ -3,17 +3,11 @@ using Application.Handlers.Authorization;
 using Application.Interfaces;
 using Application.Services.Authorization;
 using Application.UnitTests.Configuration.Mappers;
-using AutoMapper;
 using Domain.DTOs.Authorization;
 using Domain.Errors;
 using Domain.Models;
 using Domain.ValueObjects;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.Handlers.Authorization
 {
@@ -21,17 +15,20 @@ namespace Application.UnitTests.Handlers.Authorization
     {
         private readonly Mock<IUserRepository> _mockedUserRepository;
         private readonly Mock<IAuthorizationRepository> _mockedAuthorizationRepository;
+        private readonly HashService _hashService;
         private readonly LoginHandler _handler;
 
         public LoginHandlerTest()
         {
             _mockedUserRepository = new Mock<IUserRepository>();
             _mockedAuthorizationRepository = new Mock<IAuthorizationRepository>();
+            _hashService = new HashService();
 
             _handler = new(
                 _mockedUserRepository.Object,
                 _mockedAuthorizationRepository.Object,
-                MapperConfigurator.CreateMapperForAuthProfile());
+                MapperConfigurator.CreateMapperForAuthProfile(),
+                _hashService);
         }
 
         [Fact]
@@ -112,9 +109,9 @@ namespace Application.UnitTests.Handlers.Authorization
                 Times.Once());
         }
 
-        private static User CreateJohnDoe()
+        private User CreateJohnDoe()
         {
-            var hashedPassword = HashService.Hash("Password123!")!;
+            var hashedPassword = _hashService.Hash("Password123!")!;
             var password = PasswordValueObject.Create(hashedPassword).Data!;
             return new User
             {

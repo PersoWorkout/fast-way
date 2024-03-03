@@ -14,16 +14,19 @@ namespace Application.UnitTests.Handlers.Authorization
     {
         private readonly Mock<IAuthorizationRepository> _mockedAuthRepository;
         private readonly Mock<IUserRepository> _mockedUserRepository;
+        private readonly HashService _hashService;
         private readonly RegisterHandler _handler;
 
         public RegisterHandlerTest()
         {
             _mockedAuthRepository = new Mock<IAuthorizationRepository>();
             _mockedUserRepository = new Mock<IUserRepository>();
+            _hashService = new HashService();
 
             _handler = new(_mockedAuthRepository.Object,
                 _mockedUserRepository.Object,
-                MapperConfigurator.CreateMapperForAuthProfile());
+                MapperConfigurator.CreateMapperForAuthProfile(),
+                _hashService);
         }
 
         [Fact]
