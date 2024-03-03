@@ -5,18 +5,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
-namespace Infrastructure.IntegrationTests
+namespace Presentation.FunctionalTests
 {
-    public class IntegrationWebApplicationFactory: WebApplicationFactory<Program>, IAsyncLifetime
+    public class FunctionalWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
-        private readonly PostgreSqlContainer _dbContainer = 
+        private readonly PostgreSqlContainer _dbContainer =
             new PostgreSqlBuilder()
                 .WithImage("postgres:latest")
-                .WithDatabase("fast-way-integration-test")
+                .WithDatabase("fast-way-functional-test")
                 .WithUsername("user-test")
                 .WithPassword("integration")
                 .Build();
-
         public Task InitializeAsync()
         {
             return _dbContainer.StartAsync();
@@ -42,13 +41,13 @@ namespace Infrastructure.IntegrationTests
                     x.ServiceType == typeof(
                         DbContextOptions<AuthDbContext>));
 
-                if(memoryDescriptor is not null)
+                if (memoryDescriptor is not null)
                 {
                     services.Remove(memoryDescriptor);
                 }
 
                 services.AddDbContext<AuthDbContext>(options =>
-                    options.UseInMemoryDatabase("IntegrationAuthDbTest"));
+                    options.UseInMemoryDatabase("FunctionalAuthDbTest"));
             });
         }
 
