@@ -20,8 +20,8 @@ namespace Domain.Models
         {
             if (!string.IsNullOrEmpty(firstname)) Firstname = firstname;
             if (!string.IsNullOrEmpty(lastname)) Lastname = lastname;
-            if (email != null) Email = email;
-            if (password != null) Password = password;
+            if (email is not null) Email = email;
+            if (password is not null) Password = password;
             UpdatedAt = DateTime.Now;
         }
     }

@@ -32,17 +32,11 @@ namespace Application.Handlers.Users
                     .Failure(UserErrors.NotFound(
                         request.Id.ToString()));
 
-            if (!string.IsNullOrEmpty(request.Firstname)) 
-                user.Firstname = request.Firstname;
-
-            if (!string.IsNullOrEmpty(request.Lastname))
-                user.Lastname = request.Lastname;
-
-            if (request.Email is not null)
-                user.Email = request.Email;
-
-            if (request.Password is not null)
-                user.Password = request.Password;
+            user.Update(
+                request.Firstname,
+                request.Lastname,
+                request.Email,
+                request.Password);
 
             user = await _userRepository.Update(user);
 
