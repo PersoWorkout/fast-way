@@ -1,6 +1,7 @@
 ﻿using Application.Commands.Users;
 using Application.Handlers.Users;
 using Application.Interfaces;
+using Application.Services.Authorization;
 using Application.UnitTests.Configuration.Mappers;
 using AutoMapper;
 using Domain.DTOs.Users.Response;
@@ -15,14 +16,16 @@ namespace Application.UnitTests.Handlers.Users
     {
         private readonly Mock<IUserRepository> _mockedUserRepository;
         private readonly IMapper _mapper;
+        private readonly HashService _hashService;
         private readonly CreateUserHandler _handler;
 
         public CreateUserHandlerTest()
         {
             _mockedUserRepository = new Mock<IUserRepository>();
             _mapper = MapperConfigurator.CreateMapperForUserProfile();
+            _hashService = new HashService();
 
-            _handler = new(_mockedUserRepository.Object, _mapper);
+            _handler = new(_mockedUserRepository.Object, _mapper, _hashService);
         }
 
         [Fact]

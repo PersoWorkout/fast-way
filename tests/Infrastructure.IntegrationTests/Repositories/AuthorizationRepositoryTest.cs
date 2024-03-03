@@ -32,52 +32,38 @@ namespace Infrastructure.IntegrationTests.Repositories
 
             //Act
             var session = await _authRepository
-                .CreateSession(new Session(userId, token));
+                .CreateSession(new Session(
+                    userId, 
+                    _hashService.Hash(token)!));
 
             //Assert
             var existingSession = await _dbContext.Sessions
-                .FirstOrDefaultAsync(x => x.Token == token);
+                .FirstOrDefaultAsync(x => _hashService.Verify(token, x.Token));
 
             Assert.NotNull(existingSession);
             Assert.Equal(userId, session.UserId);
         }
 
         [Fact]
-        public async Task CreateSession_ShouldThrowAnException_WhenUserIdAndTokenAlreadyUsed()
-        {
-            //Arrange
-            var userId = Guid.NewGuid();
-            string token = TokenService.Generate();
-
-            await _dbContext.Sessions.AddAsync(
-                new Session(userId, token));
-            await _dbContext.SaveChangesAsync();
-
-            //Act
-            async Task action() => await _authRepository
-                .CreateSession(new Session(userId, token));
-
-            //Assert
-            await Assert.ThrowsAnyAsync<InvalidOperationException>(action);
-        }
-
-        [Fact]
         public async Task GetByToken_ShouldReturnSession_WhenTokenExist()
         {
             //Arrange
-            var existingSession = await _dbContext.AddAsync(
-                new Session(
+            var token = TokenService.Generate();
+            var session = new Session(
                     Guid.NewGuid(),
-                    _hashService.Hash(TokenService.Generate())));
+                    _hashService.Hash(token)!);
+
+            var existingSession = await _dbContext
+                .AddAsync(session);
 
             await _dbContext.SaveChangesAsync();
 
             //Act
-            var session = await _authRepository
-                .GetByToken(existingSession.Entity.Token);
+            var result = await _authRepository
+                .GetByToken(token);
 
             //Assert
-            Assert.NotNull(session);
+            Assert.NotNull(result);
             Assert.Equal(existingSession.Entity.UserId, session.UserId);
         }
 
@@ -100,7 +86,7 @@ namespace Infrastructure.IntegrationTests.Repositories
             var existingSession = await _dbContext.AddAsync(
                 new Session(
                     Guid.NewGuid(),
-                    TokenService.Generate()));
+                    _hashService.Hash(TokenService.Generate())!));
 
             await _dbContext.SaveChangesAsync();
 
@@ -109,7 +95,7 @@ namespace Infrastructure.IntegrationTests.Repositories
 
             //Assert
             var existInDb = await _dbContext.Sessions.AnyAsync(
-                x => x.Token == existingSession.Entity.Token);
+                x => _hashService.Verify(existingSession.Entity.Token, x.Token));
 
             Assert.False(existInDb);
         }
@@ -123,12 +109,12 @@ namespace Infrastructure.IntegrationTests.Repositories
             var firstSession = await _dbContext.AddAsync(
                 new Session(
                     userId,
-                    TokenService.Generate()));
+                    _hashService.Hash(TokenService.Generate())!));
 
             var secondSession = await _dbContext.AddAsync(
                 new Session(
                     userId,
-                    TokenService.Generate()));
+                    _hashService.Hash(TokenService.Generate())!));
 
             await _dbContext.SaveChangesAsync();
 
