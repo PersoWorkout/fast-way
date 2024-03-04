@@ -2,6 +2,7 @@
 using Domain.DTOs.Authorization.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Extensions;
+using Presentation.Presenters.Authorization;
 
 namespace Presentation.Controllers.Authentication
 {
@@ -10,10 +11,12 @@ namespace Presentation.Controllers.Authentication
     public class RegisterController : Controller
     {
         private readonly RegisterAction _action;
+        private readonly RegisterPresenter _presenter;
 
-        public RegisterController(RegisterAction action)
+        public RegisterController(RegisterAction action, RegisterPresenter presenter)
         {
             _action = action;
+            _presenter = presenter;
         }
 
         [HttpPost]
@@ -22,7 +25,7 @@ namespace Presentation.Controllers.Authentication
             var result = await _action.Execute(request);
 
             return result.IsSucess ?
-                Results.Ok(result.Data) :
+                Results.Ok(_presenter.Json(result.Data!)) :
                 ResultsExtensions.FailureResult(result);
         }
     }

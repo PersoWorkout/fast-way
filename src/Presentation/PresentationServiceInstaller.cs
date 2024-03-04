@@ -7,6 +7,7 @@ namespace Presentation
         public static IServiceCollection InstallPresentationServices(this IServiceCollection services)
         {
             services.AddScoped<LoginPresenter>();
+            services.AddScoped<RegisterPresenter>();
 
             return services;
         }
