@@ -1,6 +1,6 @@
 ﻿using Application.Queries;
 using Domain.Abstractions;
-using Domain.DTOs.Users.Response;
+using Domain.Models;
 using MediatR;
 
 namespace Application.Actions.Users
@@ -9,7 +9,7 @@ namespace Application.Actions.Users
     {
         private readonly IMediator _mediator = mediator;
 
-        public async Task<Result<List<UserForList>>> Execute()
+        public async Task<Result<List<User>>> Execute()
         {
             return await _mediator.Send(new GetUsersQuery());
         }

@@ -3,6 +3,7 @@ using Domain.DTOs.Users.Request;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Authorization.Attributes;
 using Presentation.Extensions;
+using Presentation.Presenters.Users;
 
 namespace Presentation.Controllers.Users
 {
@@ -11,10 +12,12 @@ namespace Presentation.Controllers.Users
     public class CreateUserController : Controller
     {
         private readonly CreateUserAction _action;
+        private readonly CreateUserPresenter _presenter;
 
-        public CreateUserController(CreateUserAction action)
+        public CreateUserController(CreateUserAction action, CreateUserPresenter presenter)
         {
             _action = action;
+            _presenter = presenter;
         }
 
         [Admin]
@@ -24,7 +27,7 @@ namespace Presentation.Controllers.Users
             var result = await _action.Execute(request);
 
             return result.IsSucess ?
-                Results.Ok(result.Data) :
+                Results.Ok(_presenter.Json(result.Data!)) :
                 ResultsExtensions.FailureResult(result);
         }
     }

@@ -1,11 +1,11 @@
 ﻿using Domain.Abstractions;
-using Domain.DTOs.Users.Response;
+using Domain.Models;
 using Domain.ValueObjects;
 using MediatR;
 
 namespace Application.Commands.Users
 {
-    public class UpdateUserCommand: IRequest<Result<UserDetails>> 
+    public class UpdateUserCommand: IRequest<Result<User>> 
     {
         public Guid Id { get; set; }
         public string? Firstname { get; set; }

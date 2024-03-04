@@ -4,7 +4,7 @@ using Application.UnitTests.Configuration.Mappers;
 using Application.Validators.Users;
 using Domain.Abstractions;
 using Domain.DTOs.Users.Request;
-using Domain.DTOs.Users.Response;
+using Domain.Models;
 using MediatR;
 using Moq;
 
@@ -87,7 +87,7 @@ namespace Application.UnitTests.Actions.Users
 
             _mockedSender.Setup(
                 x => x.Send(It.IsAny<UpdateUserCommand>(), default))
-                .ReturnsAsync(Result<UserDetails>.Success());            
+                .ReturnsAsync(Result<User>.Success());            
 
             //Act
             var result = await _action.Execute(userId.ToString(), request);

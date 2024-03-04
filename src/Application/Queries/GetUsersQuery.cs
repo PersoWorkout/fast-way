@@ -1,6 +1,6 @@
 ﻿using Domain.Abstractions;
-using Domain.DTOs.Users.Response;
+using Domain.Models;
 using MediatR;
 
 namespace Application.Queries;
-public class GetUsersQuery: IRequest<Result<List<UserForList>>> { }
+public class GetUsersQuery: IRequest<Result<List<User>>> { }

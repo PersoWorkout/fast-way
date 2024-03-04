@@ -1,9 +1,9 @@
 ﻿using Application.Actions.Users;
 using Domain.DTOs.Users.Request;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Extensions;
 using Presentation.Authorization.Attributes;
 using Presentation.Extensions;
+using Presentation.Presenters.Users;
 
 namespace Presentation.Controllers.Users
 {
@@ -12,10 +12,12 @@ namespace Presentation.Controllers.Users
     public class UpdateUserController : Controller
     {
         private readonly UpdateUserAction _action;
+        private readonly UpdateUserPresenter _presenter;
 
-        public UpdateUserController(UpdateUserAction action)
+        public UpdateUserController(UpdateUserAction action, UpdateUserPresenter presenter)
         {
             _action = action;
+            _presenter = presenter;
         }
 
         [Admin]
@@ -25,7 +27,7 @@ namespace Presentation.Controllers.Users
             var result = await _action.Execute(id, request);
 
             return result.IsSucess ?
-                Results.Ok(result.Data) :
+                Results.Ok(_presenter.Json(result.Data!)) :
                 ResultsExtensions.FailureResult(result);
         }
     }

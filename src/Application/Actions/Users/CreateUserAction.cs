@@ -2,7 +2,7 @@
 using AutoMapper;
 using Domain.Abstractions;
 using Domain.DTOs.Users.Request;
-using Domain.DTOs.Users.Response;
+using Domain.Models;
 using FluentValidation;
 using MediatR;
 
@@ -24,14 +24,14 @@ namespace Application.Actions.Users
             _validator = validator;
         }
 
-        public async Task<Result<UserForList>> Execute(CreateUserRequest request)
+        public async Task<Result<User>> Execute(CreateUserRequest request)
         {
             List<Error> errors = [];
 
             var requestValidation = _validator.Validate(request);
             if (!requestValidation.IsValid)
             {
-             return Result<UserForList>.Failure(
+             return Result<User>.Failure(
                     requestValidation.Errors
                         .Select(x => new Error(
                             x.ErrorCode, 

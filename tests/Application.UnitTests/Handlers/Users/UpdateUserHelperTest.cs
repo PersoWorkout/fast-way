@@ -1,9 +1,6 @@
 ﻿using Application.Commands.Users;
 using Application.Handlers.Users;
 using Application.Interfaces;
-using Application.UnitTests.Configuration.Mappers;
-using AutoMapper;
-using Domain.DTOs.Users.Response;
 using Domain.Errors;
 using Domain.Models;
 using Domain.ValueObjects;
@@ -14,15 +11,13 @@ namespace Application.UnitTests.Handlers.Users
     public class UpdateUserHandlerTest
     {
         private readonly Mock<IUserRepository> _mockedUserRepository;
-        private readonly IMapper _mapper;
         private readonly UpdateUserHandler _handler;
 
         public UpdateUserHandlerTest()
         {
             _mockedUserRepository = new Mock<IUserRepository>();
-            _mapper = MapperConfigurator.CreateMapperForUserProfile();
 
-            _handler = new(_mockedUserRepository.Object, _mapper);
+            _handler = new(_mockedUserRepository.Object);
         }
 
         [Fact]
@@ -123,7 +118,7 @@ namespace Application.UnitTests.Handlers.Users
 
             //Asert
             Assert.True(result.IsSucess);
-            Assert.IsType<UserDetails>(result.Data);
+            Assert.IsType<User>(result.Data);
 
             _mockedUserRepository.Verify(
                 x => x.Update(It.IsAny<User>()),

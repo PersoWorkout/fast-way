@@ -4,7 +4,6 @@ using Application.Interfaces;
 using Application.Services.Authorization;
 using Application.UnitTests.Configuration.Mappers;
 using AutoMapper;
-using Domain.DTOs.Users.Response;
 using Domain.Errors;
 using Domain.Models;
 using Domain.ValueObjects;
@@ -76,7 +75,7 @@ namespace Application.UnitTests.Handlers.Users
 
             //Assert
             Assert.True(result.IsSucess);
-            Assert.IsType<UserForList>(result.Data);
+            Assert.IsType<User>(result.Data);
         }
 
     }

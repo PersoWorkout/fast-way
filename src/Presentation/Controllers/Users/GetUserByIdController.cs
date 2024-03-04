@@ -1,7 +1,8 @@
 ﻿using Application.Actions.Users;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Extensions;
 using Presentation.Authorization.Attributes;
+using Presentation.Extensions;
+using Presentation.Presenters.Users;
 
 namespace Presentation.Controllers.Users
 {
@@ -10,10 +11,12 @@ namespace Presentation.Controllers.Users
     public class GetUserByIdController : Controller
     {
         private readonly GetUserByIdAction _action;
+        private readonly GetUserByIdPresenter _presenter;
 
-        public GetUserByIdController(GetUserByIdAction action)
+        public GetUserByIdController(GetUserByIdAction action, GetUserByIdPresenter presenter)
         {
             _action = action;
+            _presenter = presenter;
         }
 
         [Admin]
@@ -23,14 +26,8 @@ namespace Presentation.Controllers.Users
             var result = await _action.Execute(id);
 
             return result.IsSucess ?
-                Results.Ok(result.Data) :
-                Results.Problem(
-                    statusCode: (int)result.StatusCode,
-                    title: result.StatusCode.GetDisplayName(),
-                    extensions: new Dictionary<string, object?>()
-                    {
-                        {"errors", result.Errors }
-                    });
+                Results.Ok(_presenter.Json(result.Data!)) :
+                ResultsExtensions.FailureResult(result);
         }
     }
 }

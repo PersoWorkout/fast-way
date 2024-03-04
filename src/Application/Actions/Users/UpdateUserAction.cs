@@ -4,6 +4,7 @@ using Domain.Abstractions;
 using Domain.DTOs.Users.Request;
 using Domain.DTOs.Users.Response;
 using Domain.Errors;
+using Domain.Models;
 using FluentValidation;
 using MediatR;
 using System.Net;
@@ -19,18 +20,18 @@ namespace Application.Actions.Users
         private readonly IMapper _mapper = mapper;
         private readonly IValidator<UpdateUserRequest> _validator = validator;
 
-        public async Task<Result<UserDetails>> Execute(string userId, UpdateUserRequest request)
+        public async Task<Result<User>> Execute(string userId, UpdateUserRequest request)
         {
             if (!Guid.TryParse(userId, out var parsedId))
             {
-                return Result<UserDetails>.Failure(
+                return Result<User>.Failure(
                     UserErrors.NotFound(userId),
                     HttpStatusCode.NotFound);
             }
 
             var requestValidation = _validator.Validate(request);
             if (!requestValidation.IsValid)
-                return Result<UserDetails>
+                return Result<User>
                     .Failure(requestValidation.Errors
                         .Select(x => 
                             new Error(x.ErrorCode, x.ErrorMessage))

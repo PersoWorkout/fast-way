@@ -1,12 +1,12 @@
 ﻿using Domain.Abstractions;
-using Domain.DTOs.Users.Response;
 using Domain.Enums;
+using Domain.Models;
 using Domain.ValueObjects;
 using MediatR;
 
 namespace Application.Commands.Users
 {
-    public class CreateUserCommand: IRequest<Result<UserForList>>
+    public class CreateUserCommand: IRequest<Result<User>>
     {
         public string Firstname { get; set; }
         public string Lastname { get; set; }
