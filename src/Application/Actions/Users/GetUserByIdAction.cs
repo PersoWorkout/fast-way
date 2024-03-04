@@ -2,6 +2,7 @@
 using Domain.Abstractions;
 using Domain.DTOs.Users.Response;
 using Domain.Errors;
+using Domain.Models;
 using MediatR;
 using System.Net;
 
@@ -16,11 +17,11 @@ namespace Application.Actions.Users
             _sender = sender;
         }
 
-        public async Task<Result<UserDetails>> Execute(string id)
+        public async Task<Result<User>> Execute(string id)
         {
             if(!Guid.TryParse(id, out var parsedId))
             {
-                return Result<UserDetails>.Failure(
+                return Result<User>.Failure(
                     UserErrors.NotFound(id),
                     HttpStatusCode.NotFound);
             }

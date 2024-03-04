@@ -1,37 +1,33 @@
 ﻿using Application.Interfaces;
 using Application.Queries;
-using AutoMapper;
 using Domain.Abstractions;
-using Domain.DTOs.Users.Response;
 using Domain.Errors;
+using Domain.Models;
 using MediatR;
 using System.Net;
 
 namespace Application.Handlers.Users
 {
-    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, Result<UserDetails>>
+    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, Result<User>>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
 
-        public GetUserByIdHandler(IUserRepository userRepository, IMapper mapper)
+        public GetUserByIdHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _mapper = mapper;
         }
 
-        public async Task<Result<UserDetails>> Handle(
+        public async Task<Result<User>> Handle(
             GetUserByIdQuery request, 
             CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetById(request.Id);
             if (user is null)
-                return Result<UserDetails>.Failure(
+                return Result<User>.Failure(
                     UserErrors.NotFound(request.Id.ToString()),
                     HttpStatusCode.NotFound);
 
-            return Result<UserDetails>.Success(
-                _mapper.Map<UserDetails>(user));
+            return Result<User>.Success(user);
         }
     }
 }

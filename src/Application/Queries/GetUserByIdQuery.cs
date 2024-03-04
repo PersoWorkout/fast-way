@@ -1,11 +1,11 @@
 ﻿using Domain.Abstractions;
-using Domain.DTOs.Users.Response;
+using Domain.Models;
 using MediatR;
 
 namespace Application.Queries
 {
     public class GetUserByIdQuery(Guid id) : 
-        IRequest<Result<UserDetails>>
+        IRequest<Result<User>>
     {
         public Guid Id { get; set; } = id;
     }
