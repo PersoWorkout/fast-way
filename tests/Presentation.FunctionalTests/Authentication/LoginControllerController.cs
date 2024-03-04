@@ -1,12 +1,10 @@
 ﻿using Application.Services.Authorization;
-using Domain.DTOs.Authorization;
 using Domain.Models;
 using Domain.ValueObjects;
 using Infrastructure.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Net;
-using System.Net.Http.Json;
 using System.Text;
 
 namespace Presentation.FunctionalTests.Authentication
@@ -15,7 +13,6 @@ namespace Presentation.FunctionalTests.Authentication
         BaseFunctionalTest
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly AuthDbContext _authDbContext;
         private readonly HashService _hashService;
 
         public LoginControllerController(FunctionalWebApplicationFactory factory): 
@@ -23,9 +20,6 @@ namespace Presentation.FunctionalTests.Authentication
         {
             _dbContext = _scope.ServiceProvider
                 .GetRequiredService<ApplicationDbContext>();
-
-            _authDbContext = _scope.ServiceProvider
-                .GetRequiredService<AuthDbContext>();
 
             _hashService = new();
         }
@@ -93,10 +87,7 @@ namespace Presentation.FunctionalTests.Authentication
             var result = await _client.SendAsync(httpRequest);
 
             //Assert
-            var resultContent = await result.Content.ReadFromJsonAsync<ConnectedResponse>();
-
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-            Assert.NotNull(resultContent?.Token);
         }
 
     }

@@ -5,6 +5,7 @@ using Application.Validators.Authorization;
 using Domain.Abstractions;
 using Domain.DTOs.Authorization;
 using Domain.DTOs.Authorization.Requests;
+using Domain.Models;
 using MediatR;
 using Moq;
 
@@ -57,7 +58,7 @@ namespace Application.UnitTests.Actions.Authorization
 
             _mockedSender.Setup(
                 x => x.Send(It.IsAny<LoginCommand>(), default))
-                .ReturnsAsync(Result<ConnectedResponse>.Success());
+                .ReturnsAsync(Result<Session>.Success());
 
             //Act
             var result = await _action.Execute(request);

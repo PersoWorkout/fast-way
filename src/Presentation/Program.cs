@@ -2,6 +2,7 @@ using Application;
 using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .InstallApplicationServices()
     .InstallInfrastructureServices(
-        builder.Configuration);
+        builder.Configuration)
+    .InstallPresentationServices();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

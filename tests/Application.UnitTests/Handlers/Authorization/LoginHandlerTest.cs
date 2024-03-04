@@ -27,7 +27,6 @@ namespace Application.UnitTests.Handlers.Authorization
             _handler = new(
                 _mockedUserRepository.Object,
                 _mockedAuthorizationRepository.Object,
-                MapperConfigurator.CreateMapperForAuthProfile(),
                 _hashService);
         }
 
@@ -102,7 +101,7 @@ namespace Application.UnitTests.Handlers.Authorization
 
             //Assert
             Assert.True(result.IsSucess);
-            Assert.IsType<ConnectedResponse>(result.Data);
+            Assert.IsType<Session>(result.Data);
 
             _mockedAuthorizationRepository.Verify(
                 x => x.CreateSession(It.IsAny<Session>()),
