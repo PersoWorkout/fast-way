@@ -13,15 +13,12 @@ namespace Presentation.FunctionalTests.Authentication
         BaseFunctionalTest
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly HashService _hashService;
 
         public LoginControllerController(FunctionalWebApplicationFactory factory): 
             base(factory)
         {
             _dbContext = _scope.ServiceProvider
                 .GetRequiredService<ApplicationDbContext>();
-
-            _hashService = new();
         }
 
         private const string Endpoint = "auth/login";

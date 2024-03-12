@@ -19,8 +19,6 @@ namespace Infrastructure.Repositories
 
         public async Task<Session> CreateSession(Session session)
         {
-
-
             var result = await _dbContext.Sessions.AddAsync(session);
             await _dbContext.SaveChangesAsync();
 
